@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_bee.xml" value="0.16" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_cat.xml" value="0.22" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_chiken.xml" value="0.25" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_elefant.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_finish.xml" value="0.20714285714285716" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_frog.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_fullscreen.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_fur_seal.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_grasshopper.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_lamb.xml" value="0.5" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_learn.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_lemur.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_lev.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_main2.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_monkey.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_mouse.xml" value="0.25" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_owl.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_peacock.xml" value="0.5" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_pig.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_rooster.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_snake.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_squirrel.xml" value="0.25" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_teddy.xml" value="0.33" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/activity_zebra.xml" value="0.25" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/layout/learn.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/mipmap-anydpi-v26/ic_launcher1.xml" value="0.1" />
+        <entry key="..\:/Users/dreo/AndroidStudioProjects/MyApplication984/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_bee.xml" value="0.16111111111111112" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_cat.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_chick.xml" value="0.23055555555555557" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_chiken.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_cow.xml" value="0.23055555555555557" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_dog.xml" value="0.23055555555555557" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_duck.xml" value="0.23055555555555557" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_eagle.xml" value="0.23055555555555557" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_elefant.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_finish.xml" value="0.33" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_frog.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_fur_seal.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_goat.xml" value="0.23055555555555557" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_grasshopper.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_horse.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_intro.xml" value="0.14703425229741018" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_lamb.xml" value="0.2970464135021097" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_learn.xml" value="0.5" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_lemur.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_lev.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_monkey.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_mouse.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_owl.xml" value="0.2970464135021097" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_panda.xml" value="0.23055555555555557" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_peacock.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_pig.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_rooster.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_snake.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_squirrel.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_teddy.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_turkey.xml" value="0.23055555555555557" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_wolf.xml" value="0.23055555555555557" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/activity_zebra.xml" value="0.30085470085470084" />
+        <entry key="..\:/razrabotka/Animal Sounds(FinalRandom)/app/src/main/res/layout/chick.xml" value="0.3" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

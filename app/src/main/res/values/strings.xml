@@ -1,0 +1,170 @@
+<resources>
+    <string name="app_name">Animal Sounds</string>
+    <string name="title_activity_fullscreen">Animal Sounds</string>
+    <!--                                         FullscreenActivity-->
+
+    <!--назване кнопок-->
+    <string name="exit">Exit</string>
+    <string name="restart">Restart</string>
+    <string name="iKnow">I already know how!</string>
+
+
+    <!--стринг на обучающий лайяут-->
+    <string name="toucan">Toucan</string>
+    <string name="start_learn">How to use the program?</string>
+    <string name="name_animal">This is the name of the animal</string>
+    <string name="next">Next</string>
+    <string name="next2">This is an image of an animal, like in cartoons, but if you click on it, you will see what the animal looks like in real life!</string>
+    <string name="next3">This button returns to the leading animal!</string>
+    <string name="next4">This button is for moving to the next animal!</string>
+    <string name="next5">If you press this button once, you will hear the sound that this animal makes! press again - stops the sound!</string>
+    <string name="go">All clear! Go!</string>
+    <string name="policy">Privacy policy</string>
+
+
+    <!--стринги по животным-->
+    <string name="lion">Lion</string>
+    <!--    тут межстраничная реклама-->
+
+    <string name="monkey">Monkey</string>
+    <string name="cat">Cat</string>
+
+    <!--    тут межстраничная реклама-->
+    <string name="furseal">Furseal</string>
+    <!--    тут межстраничная реклама-->
+
+    <string name="squirrel">Squirrel</string>
+
+    <!--    тут межстраничная реклама-->
+    <string name="chiken">Chiken</string>
+    <!--    тут межстраничная реклама-->
+
+    <string name="rooster">Cock</string>
+    <string name="frog">Frog</string>
+    <string name="bee">Bee</string>
+    <string name="zebra">Zebra</string>
+
+    <!--    тут межстраничная реклама-->
+    <string name="pig">Pig</string>
+    <!--    тут межстраничная реклама-->
+
+    <string name="lemur">Lemur</string>
+    <string name="teddy">Teddy</string>
+    <string name="grasshopper">Grasshopper</string>
+    <string name="snake">Snake</string>
+
+    <!--    тут межстраничная реклама-->
+    <string name="mouse">Mouse</string>
+    <!--    тут межстраничная реклама-->
+
+    <!--    тут межстраничная реклама-->
+    <string name="elefant">Elefant</string>
+    <!--    тут межстраничная реклама-->
+
+    <string name="lamb">Lamb</string>
+    <string name="owl">Owl</string>
+    <string name="peacock">Peacock</string>
+
+    <!--добавил 10 штук 13,06-->
+    <!--    тут межстраничная реклама-->
+    <string name="chick">Chick</string>
+    <!--    тут межстраничная реклама-->
+
+    <!--    тут межстраничная реклама-->
+    <string name="cow">Cow</string>
+    <!--    тут межстраничная реклама-->
+
+    <!--    тут межстраничная реклама-->
+    <string name="dog">Dog</string>
+    <!--    тут межстраничная реклама-->
+
+    <string name="duck">Duck</string>
+    <string name="eagle">Eagle</string>
+    <string name="goat">Goat</string>
+
+    <string name="horse">Horse</string>
+    <string name="panda">Panda</string>
+    <string name="turkeycock">Turkeycock</string>
+    <string name="wolf">Wolf</string>
+
+
+    <string name="finish">Stay tuned for program updates so you "don't miss more animals"! We look forward to hearing from you and appreciating your feedback on Google play! Thank you!</string>
+
+    <!--добавил 10 штук 1.03-->
+    <string name="deer">Deer</string>
+    <string name="donkey">Donkey</string>
+    <string name="goose">Goose</string>
+    <string name="parrot">Parrot</string>
+    <string name="racoon">Racoon</string>
+
+    <!--рекламные баннера по животным-->
+    <!--<string name="lionR">ca-app-pub-3971991853344828/7235486448</string>-->
+    <string name="lionR">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="monkeyR">ca-app-pub-3971991853344828/3326007508</string>
+
+    <string name="catR">ca-app-pub-3971991853344828/2918957559</string>
+
+    <string name="fursealR">ca-app-pub-3971991853344828/9292794210</string>
+
+    <string name="squirrelR">ca-app-pub-3971991853344828/5353549201</string>
+
+    <string name="chikenR">ca-app-pub-3971991853344828/6283487498</string>
+
+    <string name="roosterR">ca-app-pub-3971991853344828/7404997478</string>
+
+    <string name="frogR">ca-app-pub-3971991853344828/7213425789</string>
+
+    <string name="beeR">ca-app-pub-3971991853344828/1961099105</string>
+
+    <string name="zebraR">ca-app-pub-3971991853344828/1769527418</string>
+
+    <string name="pigR">ca-app-pub-3971991853344828/3361223959</string>
+
+    <string name="lemurR">ca-app-pub-3971991853344828/3918830996</string>
+
+    <string name="teddyR">ca-app-pub-3971991853344828/3727259301</string>
+
+    <string name="grasshopperR">ca-app-pub-3971991853344828/9512533480</string>
+
+    <string name="snakeR">ca-app-pub-3971991853344828/3535687614</string>
+
+    <string name="mouseR">ca-app-pub-3971991853344828/5970279269</string>
+
+    <string name="elefantR">ca-app-pub-3971991853344828/2947125134</string>
+
+    <string name="lambR">ca-app-pub-3971991853344828/4465625903</string>
+
+    <string name="owlR">ca-app-pub-3971991853344828/3877063427</string>
+
+    <string name="peacockR">ca-app-pub-3971991853344828/6479746853</string>
+
+    <string name="finishR">ca-app-pub-3971991853344828/3493920049</string>
+
+    <!--добавил 10 штук 13,06-->
+    <string name="chickR">ca-app-pub-3971991853344828/5293986215</string>
+
+    <string name="cowR">ca-app-pub-3971991853344828/4639380097</string>
+
+    <string name="dogR">ca-app-pub-3971991853344828/5447681849</string>
+
+    <string name="eagleR">ca-app-pub-3971991853344828/3597761164</string>
+
+    <string name="goatR">ca-app-pub-3971991853344828/5760890071</string>
+
+    <string name="horseR">ca-app-pub-3971991853344828/7345434481</string>
+
+    <string name="pandaR">ca-app-pub-3971991853344828/7690701801</string>
+
+    <string name="turkeycockR">ca-app-pub-3971991853344828/8466944466</string>
+
+    <string name="wolfR">ca-app-pub-3971991853344828/2438375123</string>
+
+    <string name="duckR">ca-app-pub-3971991853344828/8275372775</string>
+
+    <!--добавил 10 штук 1.03-->
+
+
+    <!--стартовое название-->
+    <string name="start">click to start!</string>
+</resources>

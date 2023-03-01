@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/forslides"
+    tools:context=".learn" >
+
+
+
+    <ImageView
+        android:id="@+id/imageBack"
+        android:layout_width="74dp"
+        android:layout_height="69dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@mipmap/back" />
+
+    <ImageView
+        android:id="@+id/imageZvyk"
+        android:layout_width="74dp"
+        android:layout_height="69dp"
+        android:clickable="false"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@mipmap/zvyk" />
+
+    <ImageView
+        android:id="@+id/imageNext"
+        android:layout_width="74dp"
+        android:layout_height="69dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@mipmap/next" />
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#FDFDFD"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="@string/toucan"
+        android:textColor="#000000"
+        android:textSize="34sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.064" />
+
+    <ImageView
+        android:id="@+id/imageAnimal"
+        android:layout_width="352dp"
+        android:layout_height="428dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/imageZvyk"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@mipmap/toucan" />
+
+    <Button
+        android:id="@+id/start_learn"
+        android:layout_width="272dp"
+        android:layout_height="66dp"
+        android:background="@color/button_learn"
+        android:backgroundTint="@color/button_learn"
+        android:hapticFeedbackEnabled="false"
+        android:shadowColor="#EA1010"
+        android:text="@string/start_learn"
+        android:textColor="#0A2195"
+        app:layout_constraintBottom_toTopOf="@+id/imageZvyk"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.97"
+        app:rippleColor="#A89898"
+        app:strokeColor="#831515" />
+
+    <Button
+        android:id="@+id/i_know"
+        android:layout_width="272dp"
+        android:layout_height="66dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/teal_200"
+        android:backgroundTint="@color/button_learn"
+        android:hapticFeedbackEnabled="false"
+        android:shadowColor="#EA1010"
+        android:text="@string/iKnow"
+        android:textColor="#0A2195"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:rippleColor="#A89898"
+        app:strokeColor="#831515" />
+
+    <TextView
+        android:id="@+id/info_name"
+        android:layout_width="326dp"
+        android:layout_height="80dp"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageZvyk"
+        app:layout_constraintEnd_toEndOf="@+id/imageAnimal"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="@+id/imageAnimal"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/info_name2"
+        android:layout_width="382dp"
+        android:layout_height="195dp"
+        android:layout_marginBottom="80dp"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageZvyk"
+        app:layout_constraintEnd_toEndOf="@+id/imageAnimal"
+        app:layout_constraintStart_toStartOf="@+id/imageAnimal"
+        app:layout_constraintTop_toBottomOf="@+id/policy"
+        app:layout_constraintVertical_bias="0.938" />
+
+    <TextView
+        android:id="@+id/info_name3"
+        android:layout_width="396dp"
+        android:layout_height="222dp"
+        android:layout_marginBottom="88dp"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageZvyk"
+        app:layout_constraintEnd_toEndOf="@+id/imageAnimal"
+        app:layout_constraintHorizontal_bias="0.522"
+        app:layout_constraintStart_toStartOf="@+id/imageAnimal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.822" />
+
+    <TextView
+        android:id="@+id/policy"
+        android:layout_width="242dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="@string/policy"
+        android:textColorHint="#ffffff"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
