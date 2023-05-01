@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -35,6 +36,7 @@ class IntroActivity : ComponentActivity() {
         Goose::class.java,
         Parrot::class.java,
         Racoon::class.java,
+
         chiken::class.java,
         elefant::class.java,
         frog::class.java,
@@ -43,7 +45,7 @@ class IntroActivity : ComponentActivity() {
         lamb::class.java,
         lemur::class.java,
         lev::class.java,
-         monkey::class.java,
+        monkey::class.java,
         mouse::class.java,
         owl::class.java,
         peacock::class.java,
@@ -63,8 +65,10 @@ class IntroActivity : ComponentActivity() {
         horse::class.java,
         panda::class.java,
         turkey::class.java,
-        wolf::class.java
-        )
+        wolf::class.java ,
+                //1.05.2023
+        Toucan::class.java
+    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,10 +85,10 @@ const val EXTRA_ACTIVITY_NAMES = "extra:activityNames"
 
 fun Collection<Class<out Activity>>.startRandom(context: Context) {
 
-    when  {
+    when {
         isEmpty() -> {
 
-            context.startActivity(Intent(context,finish::class.java))
+            context.startActivity(Intent(context, finish::class.java))
             finish()
         }
         else -> {
@@ -100,6 +104,7 @@ fun Collection<Class<out Activity>>.startRandom(context: Context) {
         }
     }
 }
+
 @Suppress("UNCHECKED_CAST")
 fun Intent.extractActivities(): Set<Class<out Activity>> {
     val activityNames = getStringArrayExtra(EXTRA_ACTIVITY_NAMES)
@@ -108,36 +113,35 @@ fun Intent.extractActivities(): Set<Class<out Activity>> {
     }?.toSet()
 
 
-
     var nomer: Int? = activities?.size
-    Log.d("Mylog","колличество активити=$nomer")
+    Log.d("Mylog", "колличество активити=$nomer")
 
-    when (nomer){
-        26->{
+    when (nomer) {
+        26 -> {
 
 
-            Log.d("Mylog","запуск рекламы")
+            Log.d("Mylog", "запуск рекламы")
         }
-        22->{
-            Log.d("Mylog","запуск рекламы")
+        22 -> {
+            Log.d("Mylog", "запуск рекламы")
         }
-        18->{
-            Log.d("Mylog","запуск рекламы")
+        18 -> {
+            Log.d("Mylog", "запуск рекламы")
         }
-        14->{
-            Log.d("Mylog","запуск рекламы")
+        14 -> {
+            Log.d("Mylog", "запуск рекламы")
         }
-        10->{
-            Log.d("Mylog","запуск рекламы")
+        10 -> {
+            Log.d("Mylog", "запуск рекламы")
         }
-        6->{
-            Log.d("Mylog","запуск рекламы")
+        6 -> {
+            Log.d("Mylog", "запуск рекламы")
         }
-        3->{
-            Log.d("Mylog","запуск рекламы")
+        3 -> {
+            Log.d("Mylog", "запуск рекламы")
         }
-        0->{
-            Log.d("Mylog","запуск рекламы")
+        0 -> {
+            Log.d("Mylog", "запуск рекламы")
         }
     }
     return requireNotNull(activities)
@@ -145,20 +149,21 @@ fun Intent.extractActivities(): Set<Class<out Activity>> {
 }
 
 
-
-
 ////////////лев-межстраничный///////////////////////////////////////////////////////////////////////////////
 class lev : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
-    lateinit var binding: ActivityFurSealBinding
+    lateinit var binding: ActivityLevBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.lev) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
-        binding = ActivityFurSealBinding.inflate(layoutInflater)
+        binding = ActivityLevBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.lev)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -183,8 +188,10 @@ class lev : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.lev}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -194,77 +201,97 @@ class lev : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
-            nextImage()
+            //nextImage()
+
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
+
     //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
+
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
@@ -272,18 +299,21 @@ class lev : AppCompatActivity() {
 
 }
 
-    //////////////monkey////////////////////////////////////////////////////////////////////////////
+//////////////monkey////////////////////////////////////////////////////////////////////////////
 class monkey : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityMonkeyBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.monkey) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityMonkeyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.monkey)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -307,8 +337,10 @@ class monkey : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.monkey}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -319,37 +351,50 @@ class monkey : AppCompatActivity() {
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
+            finish()
         }
 
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
-        //loadInterAd()
+
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 //////////////Cat///////////////////////////////////////////////////////////////////////////////
 class cat : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
@@ -357,13 +402,15 @@ class cat : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.cat) }
+    private lateinit var mediaPlayer: MediaPlayer
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityCatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.cat)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -387,13 +434,19 @@ class cat : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.cat}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
                 music = !music
             }
+
+//            mediaPlayer.setOnPreparedListener {
+//                mediaPlayer.start()
+//            }
         }
         playMusic()
 //следующая картинка
@@ -404,46 +457,61 @@ class cat : AppCompatActivity() {
             finish()
         }
     }
+
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-
-        mediaPlayer.stop()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
-        //loadInterAd()
+
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 /////////////морской котик - межстраничный/////////////////////////////////////////////////////////////////////
 class furseal : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityFurSealBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.furseal) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityFurSealBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.furseal)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -468,8 +536,10 @@ class furseal : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.furseal}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -479,94 +549,116 @@ class furseal : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
-            nextImage()
+            //nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
+
     //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
     }
 }
+
 ////////////белка//////////////////////////////////////////////////////////////////////////////
 class squirrel : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivitySquirrelBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.squirrel) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivitySquirrelBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.squirrel)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -589,8 +681,10 @@ class squirrel : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.squirrel}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -605,31 +699,42 @@ class squirrel : AppCompatActivity() {
             //showInterAd()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
 
@@ -639,19 +744,24 @@ class chiken : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityChikenBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.chiken) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityChikenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.chiken)
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
         supportActionBar?.hide();
         //запуск рекламы баннерной!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         initAdMob()
+        loadInterAd()
         //замена мультяшного животного на обычного и назад
         fun onClickAnimal() {
             binding.imageAnimal.setOnClickListener(View.OnClickListener {
@@ -668,8 +778,10 @@ class chiken : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.chiken}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -679,95 +791,117 @@ class chiken : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
 
 
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
+
     //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
     }
 }
+
 ////////////петух///////////////////////////////////////////////////////////////////////////////
 class rooster : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityRoosterBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.rooster) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityRoosterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.rooster)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -791,8 +925,10 @@ class rooster : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.rooster}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -805,46 +941,61 @@ class rooster : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
-       // loadInterAd()
+        // loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 ////////////жаба///////////////////////////////////////////////////////////////////////////////
 class frog : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityFrogBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.frog) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityFrogBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.frog)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -868,8 +1019,13 @@ class frog : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(
+                        this,
+                        Uri.parse("android.resource://$packageName/${R.raw.frog}")
+                    )
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -882,31 +1038,42 @@ class frog : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
 ////////////Пчела///////////////////////////////////////////////////////////////////////////////
@@ -916,12 +1083,14 @@ class bee : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.bee) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityBeeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.bee)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -945,14 +1114,17 @@ class bee : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.bee}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
                 music = !music
             }
         }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -962,45 +1134,61 @@ class bee : AppCompatActivity() {
             finish()
         }
     }
+
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-
-        mediaPlayer.stop()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 ////////////зебра///////////////////////////////////////////////////////////////////////////////
 class zebra : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityZebraBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.zebra) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityZebraBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.zebra)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1024,8 +1212,10 @@ class zebra : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.zebra}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1036,48 +1226,62 @@ class zebra : AppCompatActivity() {
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
-           }
+        }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         //loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 ////////////свинья-межстраничный///////////////////////////////////////////////////////////////////////////////
 class pig : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityPigBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.pig) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityPigBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.pig)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1085,6 +1289,7 @@ class pig : AppCompatActivity() {
         supportActionBar?.hide();
         //запуск рекламы баннерной!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         initAdMob()
+        loadInterAd()
         //замена мультяшного животного на обычного и назад
         fun onClickAnimal() {
             binding.imageAnimal.setOnClickListener(View.OnClickListener {
@@ -1100,8 +1305,10 @@ class pig : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.pig}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1111,94 +1318,116 @@ class pig : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
 
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
+
     //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
     }
 }
+
 ////////////лемур///////////////////////////////////////////////////////////////////////////////
 class lemur : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityLemurBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.lemur) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityLemurBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.lemur)
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1222,8 +1451,10 @@ class lemur : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.lemur}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1236,45 +1467,61 @@ class lemur : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        //loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 ////////////медведь///////////////////////////////////////////////////////////////////////////////
 class teddy : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityTeddyBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.teddy) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityTeddyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.teddy)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1298,8 +1545,10 @@ class teddy : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.teddy}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1312,45 +1561,60 @@ class teddy : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 ////////////кузнечик///////////////////////////////////////////////////////////////////////////////
 class grasshopper : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityGrasshopperBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.grasshopper) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityGrasshopperBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.grasshopper)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1374,8 +1638,10 @@ class grasshopper : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.grasshopper}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1388,45 +1654,60 @@ class grasshopper : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 ////////////змея///////////////////////////////////////////////////////////////////////////////
 class snake : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivitySnakeBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.snake) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivitySnakeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.snake)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1450,8 +1731,10 @@ class snake : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.snake}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1464,45 +1747,60 @@ class snake : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 ////////////мышь - межстраничка////////////////////////////////////////////////////////////////////
 class mouse : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityMouseBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.mouse) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityMouseBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.mouse)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1526,8 +1824,10 @@ class mouse : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.mouse}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1537,94 +1837,116 @@ class mouse : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
 
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
+
     //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
     }
 }
+
 ////////////elefant-межстраничный//////////////////////////////////////////////////////////////////
 class elefant : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityElefantBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.elefant) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityElefantBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.elefant)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1648,8 +1970,10 @@ class elefant : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.elefant}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1659,95 +1983,117 @@ class elefant : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
 
         }
 
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
+
     //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
     }
 }
+
 ////////////овечка////////////////////////////////////////////////////////////////////
 class lamb : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityLambBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.lamb) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityLambBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.lamb)
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1771,8 +2117,10 @@ class lamb : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.lamb}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1785,45 +2133,60 @@ class lamb : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 ////////////сова////////////////////////////////////////////////////////////////////
 class owl : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityOwlBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.owl) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityOwlBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.owl)
+
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1846,8 +2209,10 @@ class owl : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.owl}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1860,45 +2225,60 @@ class owl : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
+
 ////////////павлин-межстраничный////////////////////////////////////////////////////////////////////
 class peacock : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityPeacockBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.peacock) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityPeacockBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.peacock)
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -1922,8 +2302,10 @@ class peacock : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.peacock}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -1933,77 +2315,95 @@ class peacock : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
 
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
+
     //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
@@ -2015,14 +2415,17 @@ class chick : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityChickBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.chick) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var adRequest = AdRequest.Builder().build()
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityChickBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.chick)
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -2047,8 +2450,10 @@ class chick : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.chick}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -2058,37 +2463,49 @@ class chick : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
             //nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 
     //  private var mInterstitialAd: InterstitialAd? = null
@@ -2096,46 +2513,51 @@ class chick : AppCompatActivity() {
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
-                       loadInterAd()
+                        mInterstitialAd = null
+                        loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
     }
-    }
+}
 
 
 //////////////корова-межстраничный/////////////////////////////////////////////////
@@ -2143,13 +2565,16 @@ class cow : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityCowBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.cow) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityCowBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.cow)
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -2173,8 +2598,10 @@ class cow : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.cow}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -2184,77 +2611,95 @@ class cow : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
 
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
+
     //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
@@ -2266,13 +2711,16 @@ class dog : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityDogBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.dog) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityDogBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.dog)
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -2296,8 +2744,10 @@ class dog : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.dog}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -2307,77 +2757,95 @@ class dog : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
 
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
+
     //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
@@ -2390,13 +2858,16 @@ class duck : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityDuckBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.duck) }
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityDuckBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.duck)
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -2419,8 +2890,10 @@ class duck : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.duck}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -2433,31 +2906,42 @@ class duck : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
 
@@ -2466,13 +2950,16 @@ class eagle : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityEagleBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.eagle) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityEagleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.eagle)
+
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -2495,8 +2982,10 @@ class eagle : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.eagle}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -2509,31 +2998,42 @@ class eagle : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
 
@@ -2542,13 +3042,16 @@ class goat : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityGoatBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.goat) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityGoatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.goat)
+
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -2571,8 +3074,13 @@ class goat : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(
+                        this,
+                        Uri.parse("android.resource://$packageName/${R.raw.goat}")
+                    )
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -2585,31 +3093,42 @@ class goat : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
 
@@ -2618,13 +3137,16 @@ class horse : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityHorseBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.horse) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityHorseBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.horse)
+
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -2647,8 +3169,10 @@ class horse : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.horse}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -2661,31 +3185,42 @@ class horse : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
 
@@ -2694,18 +3229,15 @@ class panda : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityPandaBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.panda) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
-
-
-
         binding = ActivityPandaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
+        mediaPlayer = MediaPlayer.create(this, R.raw.panda)
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -2729,8 +3261,10 @@ class panda : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.panda}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -2743,32 +3277,42 @@ class panda : AppCompatActivity() {
             nextImage()
         }
     }
+
     //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-
+    private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-
-        mediaPlayer.stop()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
 
@@ -2780,8 +3324,9 @@ class turkey : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityTurkeyBinding
     private var interAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.turkey) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -2789,6 +3334,7 @@ class turkey : AppCompatActivity() {
         binding = ActivityTurkeyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        mediaPlayer = MediaPlayer.create(this, R.raw.turkey)
 
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -2812,8 +3358,10 @@ class turkey : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.turkey}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -2826,31 +3374,42 @@ class turkey : AppCompatActivity() {
             nextImage()
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 }
 
@@ -2860,13 +3419,14 @@ class wolf : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.wolf) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("Mylog","на входе в активити=$GetInt")
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityWolfBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.wolf)
 
 
         getWindow().setFlags(
@@ -2891,8 +3451,13 @@ class wolf : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(
+                        this,
+                        Uri.parse("android.resource://$packageName/${R.raw.wolf}")
+                    )
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -2908,17 +3473,20 @@ class wolf : AppCompatActivity() {
 
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
-
         intent.extractActivities().startRandom(context = this)
-
-        mediaPlayer.stop()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
 
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -2935,106 +3503,121 @@ class wolf : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
-    }
-}
-    ///////////олень////////////////////////////////////////////////////////////////////
-    class deer : AppCompatActivity() {
-        lateinit var binding: ActivityDeerBinding
-        private var interAd: InterstitialAd? = null
-
-        //воспроизведение звука животного
-        val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.deer) }
-        override fun onCreate(savedInstanceState: Bundle?) {
-//        Log.d("Mylog","на входе в активити=$GetInt")
-            var music = false
-            super.onCreate(savedInstanceState)
-            binding = ActivityDeerBinding.inflate(layoutInflater)
-            setContentView(binding.root)
-
-
-            getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            );
-            getSupportActionBar()?.hide();
-            //запуск рекламы баннерной!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            initAdMob()
-            //замена мультяшного животного на обычного и назад
-            fun onClickAnimal() {
-                binding.imageAnimal.setOnClickListener(View.OnClickListener {
-                    binding.imageAnimal.setImageResource(R.mipmap.deers)
-                    binding.imageAnimal.setOnClickListener {
-                        binding.imageAnimal.setImageResource(R.mipmap.deer)
-                        onClickAnimal()
-                    }
-                })
-            }
-            onClickAnimal()
-            //проигрываем и останавливаем музыку
-            fun playMusic() {
-                binding.imageZvyk.setOnClickListener {
-                    if (music) {
-                        mediaPlayer.stop()
-                        mediaPlayer.prepare()
-                    } else {
-                        mediaPlayer.start()
-                    }
-                    music = !music
-                }
-            }
-            playMusic()
-//следующая картинка
-            binding.imageNext.setOnClickListener {
-                nextImage()
-            }
-        }
-
-        //передалал переход на следующюю картинку за счет функции
-        private fun nextImage() {
-
-            intent.extractActivities().startRandom(context = this)
-
-            mediaPlayer.stop()
-        }
-
-        //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        override fun onPause() {
-            super.onPause()
-            mediaPlayer.stop()
-            binding.adView.pause()
-        }
-
-        //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        private fun initAdMob() {
-            MobileAds.initialize(this)
-            val adRequest = AdRequest.Builder().build()
-            binding.adView.loadAd(adRequest)
-        }
-
-        override fun onResume() {
-            super.onResume()
-            binding.adView.resume()
-        }
-
-        override fun onDestroy() {
-            super.onDestroy()
+        if (binding.adView != null) {
             binding.adView.destroy()
         }
-
     }
+}
+///////////олень////////////////////////////////////////////////////////////////////
+class deer : AppCompatActivity() {
+    lateinit var binding: ActivityDeerBinding
+    private var interAd: InterstitialAd? = null
+
+    //воспроизведение звука животного
+    private lateinit var mediaPlayer: MediaPlayer
+    override fun onCreate(savedInstanceState: Bundle?) {
+//        Log.d("Mylog","на входе в активити=$GetInt")
+        var music = false
+        super.onCreate(savedInstanceState)
+        binding = ActivityDeerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.deer)
+
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+        getSupportActionBar()?.hide();
+        //запуск рекламы баннерной!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        initAdMob()
+        //замена мультяшного животного на обычного и назад
+        fun onClickAnimal() {
+            binding.imageAnimal.setOnClickListener(View.OnClickListener {
+                binding.imageAnimal.setImageResource(R.mipmap.deers)
+                binding.imageAnimal.setOnClickListener {
+                    binding.imageAnimal.setImageResource(R.mipmap.deer)
+                    onClickAnimal()
+                }
+            })
+        }
+        onClickAnimal()
+        //проигрываем и останавливаем музыку
+        fun playMusic() {
+            binding.imageZvyk.setOnClickListener {
+                if (music) {
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(
+                        this,
+                        Uri.parse("android.resource://$packageName/${R.raw.deer}")
+                    )
+                    mediaPlayer.prepareAsync()
+                } else {
+                    mediaPlayer.start()
+                }
+                music = !music
+            }
+        }
+        playMusic()
+//следующая картинка
+        binding.imageNext.setOnClickListener {
+            nextImage()
+        }
+    }
+
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
+    }
+
+    //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+    }
+
+    //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private fun initAdMob() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
+    }
+}
 //////////////осел-межстраничный/////////////////////////////////////////////////
 class donkey : AppCompatActivity() {
     //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
     lateinit var binding: ActivityDonkeyBinding
     private var mInterstitialAd: InterstitialAd? = null
+
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.donkey) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityDonkeyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.donkey)
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -3058,8 +3641,10 @@ class donkey : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.donkey}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -3069,89 +3654,108 @@ class donkey : AppCompatActivity() {
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
             //запуск рекламы при переходе на след страницу
             showInterAd()
 
         }
     }
-    //передалал переход на следующюю картинку за счет функции
-    private fun nextImage(){
-        intent.extractActivities().startRandom(context = this)
 
-        mediaPlayer.stop()
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
+
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
+
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }
+
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
+
     //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun loadInterAd() {
         var adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3971991853344828/4168444130", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                adError?.toString()?.let { Log.d(TAG, it) }
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
-                mInterstitialAd = interstitialAd
-            }
-        })
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun showInterAd() {
-        if (mInterstitialAd  != null) {
-            mInterstitialAd ?.fullScreenContentCallback =
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
                 object : FullScreenContentCallback() {
                     override fun onAdDismissedFullScreenContent() {
                         Log.d(TAG, "Ad was dismissed.")
 
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         loadInterAd()
                         nextImage()
                     }
 
                     override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                         Log.d(TAG, "Ad failed to show.")
-                        mInterstitialAd  = null
+                        mInterstitialAd = null
                         nextImage()
                     }
+
                     override fun onAdShowedFullScreenContent() {
                         Log.d(TAG, "Ad showed fullscreen content.")
                     }
                 }
-            mInterstitialAd ?.show(this)
+            mInterstitialAd?.show(this)
         } else {
             loadInterAd()
         }
     }
 }
+
 ///////////гусь////////////////////////////////////////////////////////////////////
 class Goose : AppCompatActivity() {
     lateinit var binding: ActivityGooseBinding
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.goose) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("Mylog","на входе в активити=$GetInt")
         var music = false
@@ -3159,6 +3763,7 @@ class Goose : AppCompatActivity() {
         binding = ActivityGooseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        mediaPlayer = MediaPlayer.create(this, R.raw.goose)
 
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -3182,8 +3787,10 @@ class Goose : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.goose}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -3199,17 +3806,20 @@ class Goose : AppCompatActivity() {
 
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
-
         intent.extractActivities().startRandom(context = this)
-
-        mediaPlayer.stop()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
 
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3226,17 +3836,20 @@ class Goose : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 
 }
+
 ///////////Папугай////////////////////////////////////////////////////////////////////
 class Parrot : AppCompatActivity() {
     lateinit var binding: ActivityParrotBinding
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.parrot) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("Mylog","на входе в активити=$GetInt")
         var music = false
@@ -3244,6 +3857,7 @@ class Parrot : AppCompatActivity() {
         binding = ActivityParrotBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        mediaPlayer = MediaPlayer.create(this, R.raw.parrot)
 
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -3267,8 +3881,10 @@ class Parrot : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.parrot}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -3284,17 +3900,20 @@ class Parrot : AppCompatActivity() {
 
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
-
         intent.extractActivities().startRandom(context = this)
-
-        mediaPlayer.stop()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
 
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3311,7 +3930,9 @@ class Parrot : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 
 }
@@ -3322,15 +3943,14 @@ class Racoon : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    val mediaPlayer by lazy { MediaPlayer.create(this, R.raw.raccoon) }
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("Mylog","на входе в активити=$GetInt")
         var music = false
         super.onCreate(savedInstanceState)
         binding = ActivityRacoonBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
+        mediaPlayer = MediaPlayer.create(this, R.raw.raccoon)
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -3353,8 +3973,10 @@ class Racoon : AppCompatActivity() {
         fun playMusic() {
             binding.imageZvyk.setOnClickListener {
                 if (music) {
-                    mediaPlayer.stop()
-                    mediaPlayer.prepare()
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.raccoon}"))
+                    mediaPlayer.prepareAsync()
                 } else {
                     mediaPlayer.start()
                 }
@@ -3370,17 +3992,20 @@ class Racoon : AppCompatActivity() {
 
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
-
         intent.extractActivities().startRandom(context = this)
-
-        mediaPlayer.stop()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
     }
 
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
         binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3397,9 +4022,160 @@ class Racoon : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
     }
 
 }
 
+////////////тукан-межстраничный///////////////////////////////////////////////////////////////////////////////
+class Toucan : AppCompatActivity() {
+    //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
+    lateinit var binding: ActivityToucanBinding
+    private var mInterstitialAd: InterstitialAd? = null
+
+    //воспроизведение звука животного
+    private lateinit var mediaPlayer: MediaPlayer
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        var music = false
+        super.onCreate(savedInstanceState)
+        binding = ActivityToucanBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.toukan)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+        supportActionBar?.hide();
+        //запуск рекламы баннерной!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        initAdMob()
+        loadInterAd()
+        //замена мультяшного животного на обычного и назад
+        fun onClickAnimal() {
+            binding.imageAnimal.setOnClickListener(View.OnClickListener {
+                binding.imageAnimal.setImageResource(R.mipmap.toucans)
+                binding.imageAnimal.setOnClickListener {
+                    binding.imageAnimal.setImageResource(R.mipmap.toucan)
+                    onClickAnimal()
+                }
+            })
+        }
+        onClickAnimal()
+        //проигрываем и останавливаем музыку
+        fun playMusic() {
+            binding.imageZvyk.setOnClickListener {
+                if (music) {
+                    //mediaPlayer.stop()
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.toukan}"))
+                    mediaPlayer.prepareAsync()
+                } else {
+                    mediaPlayer.start()
+                }
+                music = !music
+            }
+        }
+        playMusic()
+//следующая картинка
+        binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
+            //запуск рекламы при переходе на след страницу
+            showInterAd()
+            //nextImage()
+
+        }
+    }
+
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+        finish()
+    }
+
+    //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+        if (mediaPlayer != null) {
+            mediaPlayer.stop()
+        }
+    }
+
+    //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private fun initAdMob() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+        loadInterAd()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
+    }
+
+    //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private fun loadInterAd() {
+        var adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+
+                    mInterstitialAd = interstitialAd
+                }
+            })
+    }
+
+    private fun showInterAd() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
+                object : FullScreenContentCallback() {
+                    override fun onAdDismissedFullScreenContent() {
+                        Log.d(TAG, "Ad was dismissed.")
+
+                        mInterstitialAd = null
+                        loadInterAd()
+                        nextImage()
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                        Log.d(TAG, "Ad failed to show.")
+                        mInterstitialAd = null
+                        nextImage()
+                    }
+
+                    override fun onAdShowedFullScreenContent() {
+                        Log.d(TAG, "Ad showed fullscreen content.")
+
+                    }
+                }
+            mInterstitialAd?.show(this)
+        } else {
+            loadInterAd()
+        }
+    }
+
+}
 

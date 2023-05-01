@@ -58,12 +58,14 @@
             android:name=".Racoon"
             android:exported="false" />
         <activity
+            android:name=".Toucan"
+            android:exported="false" />
+        <activity
             android:name=".IntroActivity"
             android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-
             android:value="ca-app-pub-3971991853344828~7674470141" />
 
         <activity

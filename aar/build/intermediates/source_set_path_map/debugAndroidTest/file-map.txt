@@ -1,0 +1,33 @@
+download.mishkindeveloper.AnimalSounds.test.aar-androidTest-0 E:\razrabotka\Animal Sounds(FinalRandom)reset\aar\build\generated\res\resValues\androidTest\debug
+download.mishkindeveloper.AnimalSounds.test.aar-androidTest-1 E:\razrabotka\Animal Sounds(FinalRandom)reset\aar\build\generated\res\rs\androidTest\debug
+download.mishkindeveloper.AnimalSounds.test.aar-mergeDebugAndroidTestResources-2 E:\razrabotka\Animal Sounds(FinalRandom)reset\aar\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+download.mishkindeveloper.AnimalSounds.test.aar-mergeDebugAndroidTestResources-3 E:\razrabotka\Animal Sounds(FinalRandom)reset\aar\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+download.mishkindeveloper.AnimalSounds.test.aar-merged_res-4 E:\razrabotka\Animal Sounds(FinalRandom)reset\aar\build\intermediates\merged_res\debugAndroidTest
+download.mishkindeveloper.AnimalSounds.test.aar-packaged_res-5 E:\razrabotka\Animal Sounds(FinalRandom)reset\aar\build\intermediates\packaged_res\debug
+download.mishkindeveloper.AnimalSounds.test.aar-androidTest-6 E:\razrabotka\Animal Sounds(FinalRandom)reset\aar\src\androidTest\res
+download.mishkindeveloper.AnimalSounds.test.aar-androidTestDebug-7 E:\razrabotka\Animal Sounds(FinalRandom)reset\aar\src\androidTestDebug\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-core-1.5.0-8 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\031c6d729c478b652549ce6c8345b95b\transformed\jetified-core-1.5.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-material-1.8.0-9 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\05d5873cfb6ba653ea626ae25baf365a\transformed\material-1.8.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-fragment-1.3.6-10 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\06706dbc79ad8a4e257b47fbc6ee9e1d\transformed\fragment-1.3.6\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-emoji2-views-helper-1.2.0-11 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\0af13ae2fc7722ed7cc68e23ef307421\transformed\jetified-emoji2-views-helper-1.2.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-lifecycle-viewmodel-2.5.1-12 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\0e596fe498a3450d3e8467483530952c\transformed\lifecycle-viewmodel-2.5.1\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-core-ktx-1.9.0-13 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\2cb1d617505c7860c67ab812356bae68\transformed\jetified-core-ktx-1.9.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-lifecycle-viewmodel-savedstate-2.5.1-14 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\31994cedc921dda0cb4df65f062309e2\transformed\jetified-lifecycle-viewmodel-savedstate-2.5.1\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-startup-runtime-1.1.1-15 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\356c83b34e70d708f27e071a4678cd6d\transformed\jetified-startup-runtime-1.1.1\res
+download.mishkindeveloper.AnimalSounds.test.aar-drawerlayout-1.1.1-16 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\39d5184604beedbe2e30c83671d2f1a5\transformed\drawerlayout-1.1.1\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-savedstate-1.2.0-17 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\4a9e1493810da68ab614dda5d5d58761\transformed\jetified-savedstate-1.2.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-viewpager2-1.0.0-18 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\4f1a4b075e30f9417262c7276d4de517\transformed\jetified-viewpager2-1.0.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-activity-1.6.0-19 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\54614139c4506fe5b9a4686621007a3c\transformed\jetified-activity-1.6.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-core-1.9.0-20 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\6ccdc792b7390a39aa5dbc7d9866a4b4\transformed\core-1.9.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-transition-1.2.0-21 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\7b03d9a35611ab6a57c8fddf8dd10e32\transformed\transition-1.2.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-lifecycle-process-2.4.1-22 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\88e7dafa52c82be76e4efd7f50752e73\transformed\jetified-lifecycle-process-2.4.1\res
+download.mishkindeveloper.AnimalSounds.test.aar-constraintlayout-2.0.1-23 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\8a715472cb5720b17bd32f4de54c59e8\transformed\constraintlayout-2.0.1\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-emoji2-1.2.0-24 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\92c6fe4454766e802c57390518fbf0f1\transformed\jetified-emoji2-1.2.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-cardview-1.0.0-25 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\9635f1ef0d4afd5c61611bdea6e635f3\transformed\cardview-1.0.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-appcompat-resources-1.6.1-26 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\a06ca384d5c23bf1e9237372a481f85c\transformed\jetified-appcompat-resources-1.6.1\res
+download.mishkindeveloper.AnimalSounds.test.aar-appcompat-1.6.1-27 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\b17863783fc721f23bade70977f8deab\transformed\appcompat-1.6.1\res
+download.mishkindeveloper.AnimalSounds.test.aar-lifecycle-runtime-2.5.1-28 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\be4c5b689ef299a25d402ffe1b1d4138\transformed\lifecycle-runtime-2.5.1\res
+download.mishkindeveloper.AnimalSounds.test.aar-lifecycle-livedata-core-2.5.1-29 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\dde4d0b2b906b8868f1c31e93d74de1f\transformed\lifecycle-livedata-core-2.5.1\res
+download.mishkindeveloper.AnimalSounds.test.aar-recyclerview-1.1.0-30 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\e53a4b47a38c9609f8da85e37c8a3fca\transformed\recyclerview-1.1.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-jetified-annotation-experimental-1.3.0-31 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\edd38cd4838772ac2722e7282ee7b21a\transformed\jetified-annotation-experimental-1.3.0\res
+download.mishkindeveloper.AnimalSounds.test.aar-coordinatorlayout-1.1.0-32 E:\razrabotka\AutoClicker3\.gradle\caches\transforms-3\fa8a9df64d2c00da977a6fe89e9c3421\transformed\coordinatorlayout-1.1.0\res

@@ -7,6 +7,7 @@ import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.MobileAds
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentInformation
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 outAnimation = AnimationUtils.loadAnimation(this, R.anim.alfa_out)
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        MobileAds.initialize(this) { }
         // гугл разработкик - разрешение для малолеток о просмотре рекламы
 //        val params = ConsentRequestParameters.Builder()
 //            .setTagForUnderAgeOfConsent(false)
