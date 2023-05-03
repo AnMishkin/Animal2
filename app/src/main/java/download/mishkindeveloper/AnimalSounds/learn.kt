@@ -1,6 +1,7 @@
 //для каждого
 
 package download.mishkindeveloper.AnimalSounds
+
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
@@ -12,6 +13,9 @@ import androidx.core.view.isVisible
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import download.mishkindeveloper.AnimalSounds.databinding.ActivityLearnBinding
+
+import com.google.android.ump.UserMessagingPlatform
+
 
 
 class learn : AppCompatActivity() {
@@ -43,8 +47,10 @@ class learn : AppCompatActivity() {
         }
         //политика конфиденциальности
         binding.policy.setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://mishkindeveloper.download/pages-Privacy-Policy.html"))
+            val browserIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://mishkindeveloper.download/pages-Privacy-Policy.html")
+            )
             startActivity(browserIntent)
         }
 
@@ -146,50 +152,23 @@ class learn : AppCompatActivity() {
 //    }
     }
 
-        //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        override fun onPause() {
-            super.onPause()
-            mediaPlayer.stop()
+    //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer.stop()
 
-        }
+    }
 
 
-        override fun onResume() {
-            super.onResume()
+    override fun onResume() {
+        super.onResume()
 
-        }
+    }
 
-        override fun onDestroy() {
-            super.onDestroy()
+    override fun onDestroy() {
+        super.onDestroy()
 
-        }
+    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
