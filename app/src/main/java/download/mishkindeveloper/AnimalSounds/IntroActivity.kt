@@ -67,7 +67,15 @@ class IntroActivity : ComponentActivity() {
         turkey::class.java,
         wolf::class.java ,
                 //1.05.2023
-        Toucan::class.java
+        Toucan::class.java,
+
+        //9,06,2023
+        Camel::class.java,
+        Fox::class.java,
+        Hippopotamus::class.java,
+        Kangaroo::class.java,
+        Koala::class.java
+
     )
 
 
@@ -156,8 +164,8 @@ class lev : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
-
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -185,19 +193,7 @@ class lev : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.lev}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -208,13 +204,31 @@ class lev : AppCompatActivity() {
 
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.lev)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -222,9 +236,8 @@ class lev : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -238,12 +251,18 @@ class lev : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -259,11 +278,13 @@ class lev : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
                     mInterstitialAd = interstitialAd
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
             })
     }
@@ -294,6 +315,7 @@ class lev : AppCompatActivity() {
             mInterstitialAd?.show(this)
         } else {
             loadInterAd()
+            nextImage()
         }
     }
 
@@ -306,8 +328,8 @@ class monkey : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
-
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -334,19 +356,7 @@ class monkey : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.monkey}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -355,13 +365,31 @@ class monkey : AppCompatActivity() {
         }
 
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.monkey)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -369,9 +397,8 @@ class monkey : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -384,13 +411,18 @@ class monkey : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
-
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -402,8 +434,9 @@ class cat : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
 
+    var musicPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
@@ -431,23 +464,7 @@ class cat : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.cat}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
 
-//            mediaPlayer.setOnPreparedListener {
-//                mediaPlayer.start()
-//            }
-        }
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -461,9 +478,9 @@ class cat : AppCompatActivity() {
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -471,9 +488,7 @@ class cat : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -486,13 +501,37 @@ class cat : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
-
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.cat)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
+
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
         }
     }
 }
@@ -504,8 +543,8 @@ class furseal : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
-
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -533,19 +572,7 @@ class furseal : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.furseal}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -555,13 +582,31 @@ class furseal : AppCompatActivity() {
             //nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.furseal)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -569,9 +614,8 @@ class furseal : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -585,12 +629,18 @@ class furseal : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -606,11 +656,13 @@ class furseal : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
                     mInterstitialAd = interstitialAd
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
             })
     }
@@ -639,6 +691,7 @@ class furseal : AppCompatActivity() {
                 }
             mInterstitialAd?.show(this)
         } else {
+            nextImage()
             loadInterAd()
         }
     }
@@ -651,8 +704,8 @@ class squirrel : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
-
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -678,19 +731,7 @@ class squirrel : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.squirrel}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -699,13 +740,31 @@ class squirrel : AppCompatActivity() {
             //showInterAd()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.squirrel)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -713,9 +772,8 @@ class squirrel : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -728,12 +786,18 @@ class squirrel : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -746,8 +810,8 @@ class chiken : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
-
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -775,19 +839,7 @@ class chiken : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.chiken}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -798,13 +850,31 @@ class chiken : AppCompatActivity() {
 
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.chiken)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -812,9 +882,8 @@ class chiken : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -828,12 +897,18 @@ class chiken : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -849,10 +924,11 @@ class chiken : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                     mInterstitialAd = interstitialAd
                 }
             })
@@ -883,6 +959,7 @@ class chiken : AppCompatActivity() {
             mInterstitialAd?.show(this)
         } else {
             loadInterAd()
+            nextImage()
         }
     }
 }
@@ -894,8 +971,8 @@ class rooster : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
-
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -922,32 +999,38 @@ class rooster : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.rooster}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.rooster)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -955,9 +1038,8 @@ class rooster : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -971,12 +1053,18 @@ class rooster : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         // loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -988,8 +1076,8 @@ class frog : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
-
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -1016,35 +1104,38 @@ class frog : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(
-                        this,
-                        Uri.parse("android.resource://$packageName/${R.raw.frog}")
-                    )
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.frog)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -1052,9 +1143,8 @@ class frog : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1067,12 +1157,18 @@ class frog : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -1083,8 +1179,9 @@ class bee : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
 
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -1111,19 +1208,7 @@ class bee : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.bee}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
 
         playMusic()
 //следующая картинка
@@ -1138,9 +1223,9 @@ class bee : AppCompatActivity() {
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -1148,9 +1233,7 @@ class bee : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
 
     }
 
@@ -1164,12 +1247,37 @@ class bee : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.bee)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
+
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
         }
     }
 }
@@ -1181,8 +1289,8 @@ class zebra : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
-
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -1209,32 +1317,38 @@ class zebra : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.zebra}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.zebra)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -1242,9 +1356,8 @@ class zebra : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1258,12 +1371,18 @@ class zebra : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         //loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -1275,7 +1394,8 @@ class pig : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -1302,19 +1422,7 @@ class pig : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.pig}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -1324,13 +1432,31 @@ class pig : AppCompatActivity() {
 
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.pig)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -1338,9 +1464,8 @@ class pig : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1354,12 +1479,18 @@ class pig : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -1375,10 +1506,11 @@ class pig : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                     mInterstitialAd = interstitialAd
                 }
             })
@@ -1409,6 +1541,7 @@ class pig : AppCompatActivity() {
             mInterstitialAd?.show(this)
         } else {
             loadInterAd()
+            nextImage()
         }
     }
 }
@@ -1420,7 +1553,8 @@ class lemur : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
@@ -1448,32 +1582,38 @@ class lemur : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.lemur}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.lemur)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -1481,9 +1621,8 @@ class lemur : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1497,12 +1636,18 @@ class lemur : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         //loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -1514,7 +1659,8 @@ class teddy : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
@@ -1542,32 +1688,38 @@ class teddy : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.teddy}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.teddy)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -1575,9 +1727,8 @@ class teddy : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1590,12 +1741,18 @@ class teddy : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -1607,7 +1764,8 @@ class grasshopper : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
@@ -1635,32 +1793,38 @@ class grasshopper : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.grasshopper}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.grasshopper)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -1668,9 +1832,8 @@ class grasshopper : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1683,12 +1846,18 @@ class grasshopper : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -1700,7 +1869,8 @@ class snake : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
@@ -1728,32 +1898,38 @@ class snake : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.snake}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.snake)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -1761,9 +1937,8 @@ class snake : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1776,12 +1951,18 @@ class snake : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -1793,7 +1974,8 @@ class mouse : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
@@ -1821,19 +2003,7 @@ class mouse : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.mouse}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -1843,13 +2013,31 @@ class mouse : AppCompatActivity() {
 
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.mouse)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -1857,9 +2045,8 @@ class mouse : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1873,12 +2060,18 @@ class mouse : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -1894,10 +2087,11 @@ class mouse : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                     mInterstitialAd = interstitialAd
                 }
             })
@@ -1928,6 +2122,7 @@ class mouse : AppCompatActivity() {
             mInterstitialAd?.show(this)
         } else {
             loadInterAd()
+            nextImage()
         }
     }
 }
@@ -1939,7 +2134,8 @@ class elefant : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
@@ -1967,19 +2163,7 @@ class elefant : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.elefant}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -1990,13 +2174,31 @@ class elefant : AppCompatActivity() {
         }
 
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.elefant)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -2004,9 +2206,8 @@ class elefant : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -2020,12 +2221,18 @@ class elefant : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -2041,10 +2248,11 @@ class elefant : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                     mInterstitialAd = interstitialAd
                 }
             })
@@ -2075,6 +2283,7 @@ class elefant : AppCompatActivity() {
             mInterstitialAd?.show(this)
         } else {
             loadInterAd()
+            nextImage()
         }
     }
 }
@@ -2086,7 +2295,8 @@ class lamb : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -2114,19 +2324,7 @@ class lamb : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.lamb}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -2137,19 +2335,36 @@ class lamb : AppCompatActivity() {
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.lamb)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -2162,12 +2377,18 @@ class lamb : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -2179,7 +2400,8 @@ class owl : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -2206,32 +2428,38 @@ class owl : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.owl}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.owl)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -2239,9 +2467,8 @@ class owl : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -2254,12 +2481,18 @@ class owl : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -2271,7 +2504,8 @@ class peacock : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -2299,19 +2533,7 @@ class peacock : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.peacock}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -2321,13 +2543,31 @@ class peacock : AppCompatActivity() {
 
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.peacock)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -2335,10 +2575,10 @@ class peacock : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
+
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     private fun initAdMob() {
@@ -2351,12 +2591,18 @@ class peacock : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -2372,10 +2618,11 @@ class peacock : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                     mInterstitialAd = interstitialAd
                 }
             })
@@ -2406,6 +2653,7 @@ class peacock : AppCompatActivity() {
             mInterstitialAd?.show(this)
         } else {
             loadInterAd()
+            nextImage()
         }
     }
 }
@@ -2417,7 +2665,8 @@ class chick : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var adRequest = AdRequest.Builder().build()
         var music = false
@@ -2447,19 +2696,7 @@ class chick : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.chick}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -2469,13 +2706,31 @@ class chick : AppCompatActivity() {
             //nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.chick)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -2483,9 +2738,8 @@ class chick : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -2499,12 +2753,18 @@ class chick : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -2521,10 +2781,11 @@ class chick : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                     mInterstitialAd = interstitialAd
                 }
             })
@@ -2555,6 +2816,7 @@ class chick : AppCompatActivity() {
             mInterstitialAd?.show(this)
         } else {
             loadInterAd()
+            nextImage()
         }
     }
 }
@@ -2567,7 +2829,8 @@ class cow : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -2595,19 +2858,7 @@ class cow : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.cow}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -2617,13 +2868,31 @@ class cow : AppCompatActivity() {
 
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.cow)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -2631,9 +2900,8 @@ class cow : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -2647,12 +2915,18 @@ class cow : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -2668,11 +2942,13 @@ class cow : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
 
                     mInterstitialAd = interstitialAd
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
             })
     }
@@ -2702,6 +2978,7 @@ class cow : AppCompatActivity() {
             mInterstitialAd?.show(this)
         } else {
             loadInterAd()
+            nextImage()
         }
     }
 }
@@ -2713,7 +2990,8 @@ class dog : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -2741,19 +3019,7 @@ class dog : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.dog}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -2763,13 +3029,31 @@ class dog : AppCompatActivity() {
 
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.dog)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -2777,9 +3061,8 @@ class dog : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -2793,12 +3076,18 @@ class dog : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -2814,10 +3103,11 @@ class dog : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                     mInterstitialAd = interstitialAd
                 }
             })
@@ -2848,6 +3138,7 @@ class dog : AppCompatActivity() {
             mInterstitialAd?.show(this)
         } else {
             loadInterAd()
+            nextImage()
         }
     }
 }
@@ -2860,7 +3151,8 @@ class duck : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
@@ -2887,32 +3179,38 @@ class duck : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.duck}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.duck)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -2920,9 +3218,8 @@ class duck : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -2935,12 +3232,18 @@ class duck : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -2952,7 +3255,8 @@ class eagle : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -2979,32 +3283,38 @@ class eagle : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.eagle}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.eagle)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -3012,9 +3322,8 @@ class eagle : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3027,12 +3336,18 @@ class eagle : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -3044,7 +3359,8 @@ class goat : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -3071,35 +3387,38 @@ class goat : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(
-                        this,
-                        Uri.parse("android.resource://$packageName/${R.raw.goat}")
-                    )
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.goat)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -3107,9 +3426,8 @@ class goat : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3122,12 +3440,18 @@ class goat : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -3139,7 +3463,8 @@ class horse : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -3166,32 +3491,38 @@ class horse : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.horse}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.horse)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -3199,9 +3530,8 @@ class horse : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3214,12 +3544,18 @@ class horse : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -3231,7 +3567,8 @@ class panda : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -3258,32 +3595,38 @@ class panda : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.panda}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.panda)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -3291,9 +3634,8 @@ class panda : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3306,12 +3648,18 @@ class panda : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -3326,7 +3674,8 @@ class turkey : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -3355,32 +3704,38 @@ class turkey : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.turkey}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.turkey)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -3388,9 +3743,8 @@ class turkey : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3403,12 +3757,18 @@ class turkey : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -3419,7 +3779,8 @@ class wolf : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("Mylog","на входе в активити=$GetInt")
         var music = false
@@ -3448,35 +3809,38 @@ class wolf : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(
-                        this,
-                        Uri.parse("android.resource://$packageName/${R.raw.wolf}")
-                    )
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.wolf)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -3484,9 +3848,8 @@ class wolf : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3499,12 +3862,18 @@ class wolf : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -3514,7 +3883,8 @@ class deer : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("Mylog","на входе в активити=$GetInt")
         var music = false
@@ -3543,35 +3913,38 @@ class deer : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(
-                        this,
-                        Uri.parse("android.resource://$packageName/${R.raw.deer}")
-                    )
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.deer)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -3579,9 +3952,8 @@ class deer : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3594,12 +3966,18 @@ class deer : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 }
@@ -3610,7 +3988,8 @@ class donkey : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
         super.onCreate(savedInstanceState)
@@ -3638,19 +4017,7 @@ class donkey : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.donkey}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -3660,13 +4027,31 @@ class donkey : AppCompatActivity() {
 
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.donkey)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -3674,9 +4059,8 @@ class donkey : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3690,12 +4074,18 @@ class donkey : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -3711,10 +4101,11 @@ class donkey : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                     mInterstitialAd = interstitialAd
                 }
             })
@@ -3745,6 +4136,7 @@ class donkey : AppCompatActivity() {
             mInterstitialAd?.show(this)
         } else {
             loadInterAd()
+            nextImage()
         }
     }
 }
@@ -3755,7 +4147,8 @@ class Goose : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("Mylog","на входе в активити=$GetInt")
         var music = false
@@ -3784,32 +4177,38 @@ class Goose : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.goose}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.goose)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -3817,9 +4216,8 @@ class Goose : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3832,12 +4230,18 @@ class Goose : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -3849,7 +4253,8 @@ class Parrot : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("Mylog","на входе в активити=$GetInt")
         var music = false
@@ -3878,32 +4283,38 @@ class Parrot : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.parrot}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.parrot)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -3911,9 +4322,8 @@ class Parrot : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -3926,12 +4336,18 @@ class Parrot : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -3943,7 +4359,8 @@ class Racoon : AppCompatActivity() {
     private var interAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("Mylog","на входе в активити=$GetInt")
         var music = false
@@ -3970,32 +4387,38 @@ class Racoon : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.raccoon}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
             nextImage()
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.raccoon)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -4003,9 +4426,8 @@ class Racoon : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -4018,12 +4440,18 @@ class Racoon : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.adView.resume()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -4036,7 +4464,8 @@ class Toucan : AppCompatActivity() {
     private var mInterstitialAd: InterstitialAd? = null
 
     //воспроизведение звука животного
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         var music = false
@@ -4065,19 +4494,7 @@ class Toucan : AppCompatActivity() {
         }
         onClickAnimal()
         //проигрываем и останавливаем музыку
-        fun playMusic() {
-            binding.imageZvyk.setOnClickListener {
-                if (music) {
-                    //mediaPlayer.stop()
-                    mediaPlayer.reset()
-                    mediaPlayer.setDataSource(this, Uri.parse("android.resource://$packageName/${R.raw.toukan}"))
-                    mediaPlayer.prepareAsync()
-                } else {
-                    mediaPlayer.start()
-                }
-                music = !music
-            }
-        }
+
         playMusic()
 //следующая картинка
         binding.imageNext.setOnClickListener {
@@ -4088,13 +4505,31 @@ class Toucan : AppCompatActivity() {
 
         }
     }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.toukan)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
 
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
     //передалал переход на следующюю картинку за счет функции
     private fun nextImage() {
         intent.extractActivities().startRandom(context = this)
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
         finish()
     }
 
@@ -4102,9 +4537,8 @@ class Toucan : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding.adView.pause()
-        if (mediaPlayer != null) {
-            mediaPlayer.stop()
-        }
+        mediaPlayer?.pause()
+
     }
 
     //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -4118,12 +4552,18 @@ class Toucan : AppCompatActivity() {
         super.onResume()
         binding.adView.resume()
         loadInterAd()
+        playMusic()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (binding.adView != null) {
             binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
@@ -4139,10 +4579,11 @@ class Toucan : AppCompatActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     adError?.toString()?.let { Log.d(TAG, it) }
                     mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
                     mInterstitialAd = interstitialAd
                 }
             })
@@ -4173,9 +4614,590 @@ class Toucan : AppCompatActivity() {
                 }
             mInterstitialAd?.show(this)
         } else {
+            nextImage()
             loadInterAd()
+        }
+    }
+}
+
+//9.06.2023
+///////////Верблюд////////////////////////////////////////////////////////////////////
+class Camel : AppCompatActivity() {
+    lateinit var binding: ActivityCamelBinding
+
+
+    //воспроизведение звука животного
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
+    override fun onCreate(savedInstanceState: Bundle?) {
+//        Log.d("Mylog","на входе в активити=$GetInt")
+        var music = false
+        super.onCreate(savedInstanceState)
+        binding = ActivityCamelBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.camel)
+
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+        getSupportActionBar()?.hide();
+        //запуск рекламы баннерной!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        initAdMob()
+        //замена мультяшного животного на обычного и назад
+        fun onClickAnimal() {
+            binding.imageAnimal.setOnClickListener(View.OnClickListener {
+                binding.imageAnimal.setImageResource(R.mipmap.camels)
+                binding.imageAnimal.setOnClickListener {
+                    binding.imageAnimal.setImageResource(R.mipmap.camel)
+                    onClickAnimal()
+                }
+            })
+        }
+        onClickAnimal()
+        //проигрываем и останавливаем музыку
+
+        playMusic()
+//следующая картинка
+        binding.imageNext.setOnClickListener {
+            nextImage()
+        }
+    }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.camel)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
+
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+        finish()
+    }
+
+    //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+        mediaPlayer?.pause()
+
+    }
+
+    //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private fun initAdMob() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+        playMusic()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
 }
 
+///////////Лиса////////////////////////////////////////////////////////////////////
+class Fox : AppCompatActivity() {
+    lateinit var binding: ActivityFoxBinding
+
+
+    //воспроизведение звука животного
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
+    override fun onCreate(savedInstanceState: Bundle?) {
+//        Log.d("Mylog","на входе в активити=$GetInt")
+        var music = false
+        super.onCreate(savedInstanceState)
+        binding = ActivityFoxBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.fox)
+
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+        getSupportActionBar()?.hide();
+        //запуск рекламы баннерной!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        initAdMob()
+        //замена мультяшного животного на обычного и назад
+        fun onClickAnimal() {
+            binding.imageAnimal.setOnClickListener(View.OnClickListener {
+                binding.imageAnimal.setImageResource(R.mipmap.foxs)
+                binding.imageAnimal.setOnClickListener {
+                    binding.imageAnimal.setImageResource(R.mipmap.fox)
+                    onClickAnimal()
+                }
+            })
+        }
+        onClickAnimal()
+        //проигрываем и останавливаем музыку
+
+        playMusic()
+//следующая картинка
+        binding.imageNext.setOnClickListener {
+            nextImage()
+        }
+    }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.fox)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
+
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+        finish()
+    }
+
+    //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+        mediaPlayer?.pause()
+
+    }
+
+    //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private fun initAdMob() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+        playMusic()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+}
+
+///////////Бегемот////////////////////////////////////////////////////////////////////
+class Hippopotamus : AppCompatActivity() {
+    lateinit var binding: ActivityHippopotamusBinding
+
+
+    //воспроизведение звука животного
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
+    override fun onCreate(savedInstanceState: Bundle?) {
+//        Log.d("Mylog","на входе в активити=$GetInt")
+        var music = false
+        super.onCreate(savedInstanceState)
+        binding = ActivityHippopotamusBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.hippopotamus)
+
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+        getSupportActionBar()?.hide();
+        //запуск рекламы баннерной!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        initAdMob()
+        //замена мультяшного животного на обычного и назад
+        fun onClickAnimal() {
+            binding.imageAnimal.setOnClickListener(View.OnClickListener {
+                binding.imageAnimal.setImageResource(R.mipmap.hippopotamuss)
+                binding.imageAnimal.setOnClickListener {
+                    binding.imageAnimal.setImageResource(R.mipmap.hippopotamus)
+                    onClickAnimal()
+                }
+            })
+        }
+        onClickAnimal()
+        //проигрываем и останавливаем музыку
+
+        playMusic()
+//следующая картинка
+        binding.imageNext.setOnClickListener {
+            nextImage()
+        }
+    }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.hippopotamus)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
+
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+        finish()
+    }
+
+    //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+        mediaPlayer?.pause()
+
+    }
+
+    //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private fun initAdMob() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+        playMusic()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+}
+
+///////////Кенгуру////////////////////////////////////////////////////////////////////
+class Kangaroo : AppCompatActivity() {
+    lateinit var binding: ActivityKangarooBinding
+
+
+    //воспроизведение звука животного
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
+    override fun onCreate(savedInstanceState: Bundle?) {
+//        Log.d("Mylog","на входе в активити=$GetInt")
+        var music = false
+        super.onCreate(savedInstanceState)
+        binding = ActivityKangarooBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.kangaroo)
+
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+        getSupportActionBar()?.hide();
+        //запуск рекламы баннерной!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        initAdMob()
+        //замена мультяшного животного на обычного и назад
+        fun onClickAnimal() {
+            binding.imageAnimal.setOnClickListener(View.OnClickListener {
+                binding.imageAnimal.setImageResource(R.mipmap.kangaroos)
+                binding.imageAnimal.setOnClickListener {
+                    binding.imageAnimal.setImageResource(R.mipmap.kangaroo)
+                    onClickAnimal()
+                }
+            })
+        }
+        onClickAnimal()
+        //проигрываем и останавливаем музыку
+
+        playMusic()
+//следующая картинка
+        binding.imageNext.setOnClickListener {
+            nextImage()
+        }
+    }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.kangaroo)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
+
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+        finish()
+    }
+
+    //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+        mediaPlayer?.pause()
+
+    }
+
+    //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private fun initAdMob() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+        playMusic()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+}
+
+//////////////коала-межстраничный/////////////////////////////////////////////////
+class Koala : AppCompatActivity() {
+    //закинуть в другие лайаяуты!!!!!!!!!!!!!!!!!!!!!!
+    lateinit var binding: ActivityKoalaBinding
+    private var mInterstitialAd: InterstitialAd? = null
+
+    //воспроизведение звука животного
+    private var mediaPlayer: MediaPlayer? = null
+    var musicPlaying = false
+    override fun onCreate(savedInstanceState: Bundle?) {
+        var music = false
+        super.onCreate(savedInstanceState)
+        binding = ActivityKoalaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        mediaPlayer = MediaPlayer.create(this, R.raw.koala)
+
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+        supportActionBar?.hide();
+        //запуск рекламы баннерной!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        initAdMob()
+        //замена мультяшного животного на обычного и назад
+        fun onClickAnimal() {
+            binding.imageAnimal.setOnClickListener(View.OnClickListener {
+                binding.imageAnimal.setImageResource(R.mipmap.koalas)
+
+                binding.imageAnimal.setOnClickListener {
+                    binding.imageAnimal.setImageResource(R.mipmap.koala)
+                    onClickAnimal()
+                }
+            })
+        }
+        onClickAnimal()
+        //проигрываем и останавливаем музыку
+
+        playMusic()
+//следующая картинка
+        binding.imageNext.setOnClickListener {
+            findViewById<View>(R.id.imageNext).visibility = View.INVISIBLE
+            //запуск рекламы при переходе на след страницу
+            showInterAd()
+
+        }
+    }
+    fun playMusic() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.koala)
+            mediaPlayer?.setOnCompletionListener {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+        }
+
+        binding.imageZvyk.setOnClickListener {
+            if (musicPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.seekTo(0)
+                mediaPlayer?.start()
+            }
+            musicPlaying = !musicPlaying
+        }
+    }
+    //передалал переход на следующюю картинку за счет функции
+    private fun nextImage() {
+        intent.extractActivities().startRandom(context = this)
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+        finish()
+    }
+
+    //начиная от сюда поставить во все лайяуты!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+        mediaPlayer?.pause()
+
+    }
+
+    //функция запуска баннерной рекламы,скопировать на каждый 5 лайяут!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private fun initAdMob() {
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+        loadInterAd()
+        playMusic()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding.adView != null) {
+            binding.adView.destroy()
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+
+    //скопировать на каждый 5 лайяут фулскрин реклама - с заменой кода!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private fun loadInterAd() {
+        var adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(
+            this,
+            "ca-app-pub-3971991853344828/4168444130",
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    adError?.toString()?.let { Log.d(TAG, it) }
+                    mInterstitialAd = null
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    findViewById<View>(R.id.imageNext).visibility = View.VISIBLE
+                    mInterstitialAd = interstitialAd
+                }
+            })
+    }
+
+    private fun showInterAd() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback =
+                object : FullScreenContentCallback() {
+                    override fun onAdDismissedFullScreenContent() {
+                        Log.d(TAG, "Ad was dismissed.")
+
+                        mInterstitialAd = null
+                        loadInterAd()
+                        nextImage()
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                        Log.d(TAG, "Ad failed to show.")
+                        mInterstitialAd = null
+                        nextImage()
+                    }
+
+                    override fun onAdShowedFullScreenContent() {
+                        Log.d(TAG, "Ad showed fullscreen content.")
+                    }
+                }
+            mInterstitialAd?.show(this)
+        } else {
+            nextImage()
+            loadInterAd()
+        }
+    }
+}

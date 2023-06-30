@@ -66,6 +66,7 @@
 
     <!--рекламные баннера по животным-->
     <!--<string name="lionR">ca-app-pub-3971991853344828/7235486448</string>-->
+    <string name="camel">Верблюд</string>
     <string name="lionR">ca-app-pub-3940256099942544/6300978111</string>
 
 
@@ -138,4 +139,22 @@
 
     <!--стартовое название-->
     <string name="start">Нажми для просмотра!</string>
+    <string name="fox">Лиса</string>
+    <string name="hippopotamus">Бегемот</string>
+    <string name="kangaroo">Кенгуру</string>
+    <string name="koala">Коала</string>
+
+
+    <string name="leave_review">Оставьте пожалуйста отзыв!</string>
+    <string name="text_review">Для нас очень важен каждый отзыв! Потратьте 1 минуту вашего времени - помогите в развитии приложения! Огромное спасибо! Слава Україні!</string>
+    <string name="laiter_review">Позже</string>
+    <string name="ok_review">С удовольствием!</string>
+
+    <string name="update_available">Доступно обновление</string>
+    <string name="update_yes">Да</string>
+    <string name="update_no">Нет</string>
+    <string name="update_text">У вашего приложения доступно обновление. Хотите перейти на страницу в Google Play для обновления?</string>
+    <string name="update_canceled">Обновление отменено!</string>
+    <string name="new_app_is_ready">Новое обновление готово!</string>
+    <string name="update_install">Установить</string>
 </resources>

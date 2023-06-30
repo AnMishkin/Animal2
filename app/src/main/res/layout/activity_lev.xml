@@ -39,7 +39,7 @@
         android:id="@+id/imageNext"
         android:layout_width="74dp"
         android:layout_height="69dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
